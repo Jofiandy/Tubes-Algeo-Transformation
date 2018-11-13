@@ -3,7 +3,9 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 from transformation2D import *
 from transformation3D import *
+from random import *
 import sys
+import math
 
 width = 500
 height = 500
@@ -15,6 +17,7 @@ class Point:
 		self.y = y
 
 titik = Point(0,0)
+initial = Point(0,0)
 
 #Draw Shape of the Blocks (So every changes be made, call this method)
 def drawShape(x):
@@ -24,6 +27,7 @@ def drawShape(x):
     # glEnd()
     glBegin(GL_POLYGON)
     for i in x.arrPoint:
+        glColor3f(random(), random(), random())
         glVertex2f(i.x, i.y)
     glEnd()
 
@@ -41,6 +45,7 @@ def drawAxis():
 
 #Draw all the parts for the window
 def draw():
+    initial = titik
     while (True):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
         glLoadIdentity()
@@ -49,20 +54,42 @@ def draw():
         drawShape(titik)
         glutSwapBuffers()
         comm = input()
-        if (comm == "translate"):
-            x, y = input().split()
-            P = translate(titik, float(x), float(y))
-        elif (comm == "dilate"):
-            x = input()
-            P = dilate(titik, float(x))
-        elif (comm == "reflect"):
-            x, y = input().split()
-            P = reflect(titik, float(x), float(y))
-        elif (comm == "shear"):
-            a, k = input().split()
-            P = shear(titik, a, float(k))
-        elif (comm == "exit"):
+        if (comm == "exit"):
             sys.exit()
+        #elif (comm == "reset"):
+
+        elif (comm != "multiple"):
+            doCommand2D(comm)
+        elif (comm == "multiple"):
+            tmp = input()
+            n = int(tmp)
+            for i in range(0, n):
+                comm = input()
+                doCommand2D(comm)
+
+#do the command for 2d only
+def doCommand2D(comm):
+    if (comm == "translate"):
+        x, y = input().split()
+        P = translate(titik, float(x), float(y))
+    elif (comm == "dilate"):
+        x = input()
+        P = dilate(titik, float(x))
+    elif (comm == "reflect"):
+        x, y = input().split()
+        P = reflect(titik, float(x), float(y))
+    elif (comm == "shear"):
+        a, k = input().split()
+        P = shear(titik, a, float(k))
+    elif (comm == "rotate"):
+        deg, a, b = input().split()
+        P = rotate(titik, float(deg), float(a), float(b))
+    elif (comm == "stretch"):
+        param, x = input().split()
+        P = stretch(titik, param, float(x))
+    elif (comm == "custom"):
+        a,b,c,d = input.split()
+        P = custom(titik, float(a), float(b), float(c), float(d))
 
 #Make the window of the program
 def makeWindow():
