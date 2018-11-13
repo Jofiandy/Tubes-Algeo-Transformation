@@ -13,16 +13,18 @@ class Point:
 	def __init__(self, x, y):
 		self.x = x
 		self.y = y
-	def writePoint(self):
-		print(self.x, self.y)
 
 titik = Point(0,0)
 
 #Draw Shape of the Blocks (So every changes be made, call this method)
 def drawShape(x):
+    # glBegin(GL_POLYGON)
+    # for i in x.arrPoint:
+	   # glVertex2f(i.x,i.y)
+    # glEnd()
     glBegin(GL_POLYGON)
     for i in x.arrPoint:
-		glVertex2f(i.x, i.y)
+        glVertex2f(i.x, i.y)
     glEnd()
 
 #Draw Axis
@@ -46,19 +48,19 @@ def draw():
         drawAxis()
         drawShape(titik)
         glutSwapBuffers()
-        comm = raw_input()
+        comm = input()
         if (comm == "translate"):
-            x, y = raw_input().split()
-            P = translate(titik, int(x), int(y))
+            x, y = input().split()
+            P = translate(titik, float(x), float(y))
         elif (comm == "dilate"):
-			x = input()
-			P = dilate(titik, int(x))
+            x = input()
+            P = dilate(titik, float(x))
         elif (comm == "reflect"):
-            x, y = raw_input().split()
-            P = reflect(titik, int(x), int(y))
+            x, y = input().split()
+            P = reflect(titik, float(x), float(y))
         elif (comm == "shear"):
-            a, k = raw_input().split()
-            P = shear(titik, a, int(k))
+            a, k = input().split()
+            P = shear(titik, a, float(k))
         elif (comm == "exit"):
             sys.exit()
 
@@ -88,8 +90,8 @@ def run2d():
     n = int(input())
     print("Masukan titik-titik tersebut:")
     for i in range(0, n):
-        x,y = raw_input().split()
-        tmp = Point(int(x)+250,int(y)+250)
+        x,y = input().split()
+        tmp = Point(float(x)+250,float(y)+250)
         titik.arrPoint.append(tmp)
     makeWindow()
 
