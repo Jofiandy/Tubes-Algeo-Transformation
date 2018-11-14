@@ -7,8 +7,8 @@ from random import *
 import sys
 import math
 
-width = 500
-height = 500
+width = 1000
+height = 1000
 
 class Point:
 	arrPoint = []
@@ -34,11 +34,11 @@ def drawShape(x):
 #Draw Axis
 def drawAxis():
     glBegin(GL_LINES)
-    glVertex2f(0, 250)
-    glVertex2f(500, 250)
+    glVertex2f(0,width)
+    glVertex2f(0, -width)
 
-    glVertex2f(250,0)
-    glVertex2f(250,500)
+    glVertex2f(height,0)
+    glVertex2f(-height,0)
 
     glEnd()
 
@@ -88,14 +88,14 @@ def doCommand2D(comm):
         param, x = input().split()
         P = stretch(titik, param, float(x))
     elif (comm == "custom"):
-        a,b,c,d = input.split()
+        a,b,c,d = input().split()
         P = custom(titik, float(a), float(b), float(c), float(d))
 
 #Make the window of the program
 def makeWindow():
     glutInit()                                             # initialize glut
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
-    glutInitWindowSize(500, 500)                      # set window size
+    glutInitWindowSize(width, height)                      # set window size
     glutInitWindowPosition(0, 0)                           # set window position
     window = glutCreateWindow("Tubes Algeo")              # create window with title
     glutDisplayFunc(draw)                                  # set draw function callback
@@ -104,10 +104,10 @@ def makeWindow():
 
 #Buffer the drawing
 def refresh2d(width, height):
-    glViewport(0, 0, width, height)
+    glViewport(0,0 , width, height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    glOrtho(0.0, width, 0.0, height, 0.0, 1.0)
+    glOrtho(-width, width, -height, height, 0.0, 1.0)
     glMatrixMode (GL_MODELVIEW)
     glLoadIdentity()
 
@@ -118,7 +118,7 @@ def run2d():
     print("Masukan titik-titik tersebut:")
     for i in range(0, n):
         x,y = input().split()
-        tmp = Point(float(x)+250,float(y)+250)
+        tmp = Point(float(x),float(y))
         titik.arrPoint.append(tmp)
     makeWindow()
 
