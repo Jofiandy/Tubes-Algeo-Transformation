@@ -57,5 +57,8 @@ def custom (self, a, b, c, d):
 		i.y = ty
 	return self
 
-def reset():
-	return
+def reset(self, point):
+	for i, j in zip(self.arrPoint, point.arrPoint):
+		i.x = j.x
+		i.y = j.y
+	return self

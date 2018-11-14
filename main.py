@@ -11,20 +11,20 @@ width = 1000
 height = 1000
 
 class Point:
-	arrPoint = []
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.arrPoint = []
 
-titik = Point(0,0)
+    def add_point(self, x, y):
+        temp = Point(float(x), float(y))
+        self.arrPoint.append(temp)
+
 initial = Point(0,0)
+titik = Point(0,0)
 
 #Draw Shape of the Blocks (So every changes be made, call this method)
 def drawShape(x):
-    # glBegin(GL_POLYGON)
-    # for i in x.arrPoint:
-	   # glVertex2f(i.x,i.y)
-    # glEnd()
     glBegin(GL_POLYGON)
     for i in x.arrPoint:
         glColor3f(random(), random(), random())
@@ -45,7 +45,6 @@ def drawAxis():
 
 #Draw all the parts for the window
 def draw():
-    initial = titik
     while (True):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
         glLoadIdentity()
@@ -56,8 +55,6 @@ def draw():
         comm = input()
         if (comm == "exit"):
             sys.exit()
-        #elif (comm == "reset"):
-
         elif (comm != "multiple"):
             doCommand2D(comm)
         elif (comm == "multiple"):
@@ -90,6 +87,8 @@ def doCommand2D(comm):
     elif (comm == "custom"):
         a,b,c,d = input().split()
         P = custom(titik, float(a), float(b), float(c), float(d))
+    elif (comm == "reset"):
+        P = reset(titik, initial)
 
 #Make the window of the program
 def makeWindow():
@@ -118,8 +117,8 @@ def run2d():
     print("Masukan titik-titik tersebut:")
     for i in range(0, n):
         x,y = input().split()
-        tmp = Point(float(x),float(y))
-        titik.arrPoint.append(tmp)
+        titik.add_point(x,y)
+        initial.add_point(x,y)
     makeWindow()
 
 #3D was selected (calling all transformation and method for 3D)
