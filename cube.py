@@ -118,5 +118,6 @@ def main():
     glutKeyboardFunc(keyPressed)
     InitGL(640, 480)
     glutMainLoop()
+    
 print("Press any key to exit")
 main()

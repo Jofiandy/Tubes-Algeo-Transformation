@@ -7,8 +7,14 @@ from random import *
 import sys
 import math
 
-width = 1000
-height = 1000
+Wireframe = True
+width = 700
+height = 700
+tra_x = 0
+tra_y = 0
+tra_z = 0
+x_rot = 0
+y_rot = 0
 
 class Point:
     def __init__(self, x, y):
@@ -34,17 +40,19 @@ def drawShape(x):
 #Draw Axis
 def drawAxis():
     glBegin(GL_LINES)
+
+    glColor3f(random(), random(), random())
     glVertex2f(0,width)
     glVertex2f(0, -width)
 
+    glColor3f(random(), random(), random())
     glVertex2f(height,0)
     glVertex2f(-height,0)
 
     glEnd()
 
-
 #Draw all the parts for the window
-def draw():
+def draw2D():
     while (True):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
         glLoadIdentity()
@@ -63,6 +71,74 @@ def draw():
             for i in range(0, n):
                 comm = input()
                 doCommand2D(comm)
+
+def draw3D():
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
+    glMatrixMode(GL_MODELVIEW)
+
+    glLoadIdentity()
+
+    gluLookAt(
+    0.0, 0.0, 3.0,
+    0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0)
+    # glTranslatef(0.0, 0.0, -10.0)
+
+    glRotatef(x_rot, 1.0, 0.0, 0.0)
+    glRotatef(y_rot, 0.0, 1.0, 0.0)
+
+    glTranslatef(tra_x, tra_y, tra_z)
+
+    glBegin(GL_QUADS)
+    
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex3f(-0.5, -0.5, 0.5)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f( 0.5, -0.5, 0.5)
+    glVertex3f( 0.5, 0.5, 0.5)
+
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex3f(-0.5, 0.5, 0.5)
+    glVertex3f(-0.5, -0.5, -0.5)
+    glVertex3f(-0.5, 0.5, -0.5)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f( 0.5, 0.5, -0.5)
+    glVertex3f( 0.5, -0.5, -0.5)
+
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f(-0.5, -0.5, 0.5)
+    glVertex3f(-0.5, 0.5, 0.5)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f(-0.5, 0.5, -0.5)
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex3f(-0.5, -0.5, -0.5)
+
+    glVertex3f( 0.5, -0.5, -0.5)
+    glVertex3f( 0.5, 0.5, -0.5)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f( 0.5, 0.5, 0.5)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f( 0.5, -0.5, 0.5)
+
+    glColor3f(0.0, 0.0, 1.0)
+
+    glVertex3f(-0.5, 0.5, 0.5)
+    glVertex3f( 0.5, 0.5, 0.5)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f( 0.5, 0.5, -0.5)
+    glVertex3f(-0.5, 0.5, -0.5)
+    glColor3f(1.0, 0.0, 0.0)
+
+    glVertex3f(-0.5, -0.5, 0.5)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f(-0.5, -0.5, -0.5)
+    glVertex3f( 0.5, -0.5, -0.5)
+    glVertex3f( 0.5, -0.5, 0.5)
+
+    glEnd()
+
+    # glFlush()
+    glutSwapBuffers()
 
 #do the command for 2d only
 def doCommand2D(comm):
@@ -90,16 +166,89 @@ def doCommand2D(comm):
     elif (comm == "reset"):
         P = reset(titik, initial)
 
+
+def keyPressed(*args):
+    global tra_x
+    global tra_y
+    global tra_z
+    global x_rot
+    global y_rot
+    if (args[0] == b"w"):
+        tra_z -= 0.1
+    elif (args[0] == b"s"):
+        tra_z += 0.1
+    elif (args[0] == b"a"):
+        tra_x += 0.1
+    elif (args[0] == b"d"):
+        tra_x -= 0.1
+    elif (args[0] == b"u"):
+        x_rot += 1.0
+        y_rot += 1.0 
+    elif (args[0] == b"y"):
+        x_rot -= 1.0
+        y_rot -= 1.0
+    elif (args[0] == b"x"):
+        global Wireframe
+        if Wireframe==False:
+            glPolygonMode(GL_FRONT, GL_LINE)    
+            glPolygonMode(GL_BACK, GL_LINE)
+            Wireframe=True
+        elif Wireframe ==True:
+            glPolygonMode(GL_FRONT, GL_FILL)
+            glPolygonMode(GL_BACK, GL_FILL)
+            Wireframe=False
+    # print(args[0])
+    # glutPostRedisplay()
+
 #Make the window of the program
-def makeWindow():
+def makeWindow2D():
     glutInit()                                             # initialize glut
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
     glutInitWindowSize(width, height)                      # set window size
     glutInitWindowPosition(0, 0)                           # set window position
-    window = glutCreateWindow("Tubes Algeo")              # create window with title
-    glutDisplayFunc(draw)                                  # set draw function callback
-    glutIdleFunc(draw)                                     # draw all the time
+    window = glutCreateWindow("Tubes Algeo 2D")              # create window with title
+    glutDisplayFunc(draw2D)                                  # set draw function callback
+    glutIdleFunc(draw2D)                                     # draw all the time
     glutMainLoop()
+
+def makeWindow3D():
+    global window
+    glutInit()                                             # initialize glut
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_ALPHA | GLUT_DEPTH)
+    glutInitWindowSize(width, height)                      # set window size
+    glutInitWindowPosition(0, 0)
+    window = glutCreateWindow("Tubes Algeo 3D")
+    glutDisplayFunc(draw3D)
+    glutIdleFunc(draw3D)
+    glutReshapeFunc(ReSizeGLScene)
+    glutKeyboardFunc(keyPressed)
+    InitGL(width, height)
+    glutMainLoop()
+
+def InitGL(Width, Height):                
+    glClearColor(0.0, 0.0, 0.0, 0.0)    
+    glClearDepth(1.0)                   
+    glDepthFunc(GL_LESS)                
+    glEnable(GL_DEPTH_TEST)
+    glPolygonMode(GL_FRONT, GL_LINE)    
+    glPolygonMode(GL_BACK, GL_LINE)     
+    glShadeModel(GL_SMOOTH)                
+
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()                    
+                                        
+    gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
+
+    glMatrixMode(GL_MODELVIEW)
+
+def ReSizeGLScene(Width, Height):
+    if Height == 0:                       
+        Height = 1
+    glViewport(0, 0, Width, Height)        
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
+    glMatrixMode(GL_MODELVIEW)
 
 #Buffer the drawing
 def refresh2d(width, height):
@@ -119,12 +268,12 @@ def run2d():
         x,y = input().split()
         titik.add_point(x,y)
         initial.add_point(x,y)
-    makeWindow()
+    makeWindow2D()
 
 #3D was selected (calling all transformation and method for 3D)
 def run3d():
+    makeWindow3D()
     return
-
 
 #Main program (include making the windows)
 print("Selamat datang pada program simulasi transformasi linier")
