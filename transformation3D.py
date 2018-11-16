@@ -7,20 +7,18 @@ def translate3D(self, x, y, z):
 
 def dilate3D(self, k):
 	for i in self.arrPoint:
-		i.x = ((i.x-250)*k + 250)
-		i.y = ((i.y-250)*k + 250)
-		i.z = ((i.z-250)*k + 250)
-	for i in self.arrPoint:
-		print(i.x, i.y, i.z)
+		i.x *= k
+		i.y *= k
+		i.z *= k
 	return self
 	
 def reflect3D(self, x, y, z):
 	for i in self.arrPoint:
-		tmp = i.x - (250 + x)
+		tmp = i.x - x
 		i.x -= 2*tmp
-		tmp = i.y - (250 + y)
+		tmp = i.y - y
 		i.y -= 2*tmp
-		tmp = i.z - (250 + z)
+		tmp = i.z - z
 		i.z -= 2*tmp
 	return self
 	

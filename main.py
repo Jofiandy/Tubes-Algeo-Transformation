@@ -17,20 +17,21 @@ x_rot = 0
 y_rot = 0
 
 class Point:
-    def __init__(self, x, y):
+    def __init__(self, x, y, z):
         self.x = x
         self.y = y
+        self.z = z
         self.arrPoint = []
 
-    def add_point(self, x, y):
-        temp = Point(float(x), float(y))
+    def add_point(self, x, y, z):
+        temp = Point(float(x), float(y), float(z))
         self.arrPoint.append(temp)
 
-initial = Point(0,0)
-titik = Point(0,0)
+initial = Point(0,0,0)
+titik = Point(0,0,0)
 
 #Draw Shape of the Blocks (So every changes be made, call this method)
-def drawShape(x):
+def drawShape2D(x):
     glBegin(GL_POLYGON)
     for i in x.arrPoint:
         glColor3f(random(), random(), random())
@@ -58,7 +59,7 @@ def draw2D():
         glLoadIdentity()
         refresh2d(width, height)
         drawAxis()
-        drawShape(titik)
+        drawShape2D(titik)
         glutSwapBuffers()
         comm = input()
         if (comm == "exit"):
@@ -73,72 +74,90 @@ def draw2D():
                 doCommand2D(comm)
 
 def draw3D():
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
-    glMatrixMode(GL_MODELVIEW)
+    while (True):
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
+        glMatrixMode(GL_MODELVIEW)
 
-    glLoadIdentity()
+        glLoadIdentity()
 
-    gluLookAt(
-    0.0, 0.0, 3.0,
-    0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0)
-    # glTranslatef(0.0, 0.0, -10.0)
+        gluLookAt(
+        0.0, 0.0, 3.0,
+        0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0)
 
-    glRotatef(x_rot, 1.0, 0.0, 0.0)
-    glRotatef(y_rot, 0.0, 1.0, 0.0)
+        glTranslatef(0.0, 0.0, -5.0)
 
-    glTranslatef(tra_x, tra_y, tra_z)
+        glRotatef(x_rot, 1.0, 0.0, 0.0)
+        glRotatef(y_rot, 0.0, 1.0, 0.0)
+        glTranslatef(tra_x, tra_y, tra_z)
 
+        drawShape3D(titik)
+        glFlush()
+        glutSwapBuffers()
+
+        comm = input()
+        if (comm == "dilate"):
+            n = input()
+            P = dilate3D(titik, float(n))
+        elif (comm == "exit"):
+            sys.exit()
+
+def drawShape3D(x):
     glBegin(GL_QUADS)
     
+    glColor3f(1.0, 0.0,  0.0)
+    
+    #front
+    glVertex3f(x.arrPoint[0].x, x.arrPoint[0].y, x.arrPoint[0].z)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f(x.arrPoint[1].x, x.arrPoint[1].y, x.arrPoint[1].z)
+    glVertex3f(x.arrPoint[2].x, x.arrPoint[2].y, x.arrPoint[2].z)
     glColor3f(1.0, 0.0, 0.0)
-    glVertex3f(-0.5, -0.5, 0.5)
+    glVertex3f(x.arrPoint[3].x, x.arrPoint[3].y, x.arrPoint[3].z)
+    
+    #back
+    glVertex3f(x.arrPoint[4].x, x.arrPoint[4].y, x.arrPoint[4].z)
+    glVertex3f(x.arrPoint[5].x, x.arrPoint[5].y, x.arrPoint[5].z)
     glColor3f(0.0, 1.0, 0.0)
-    glVertex3f( 0.5, -0.5, 0.5)
-    glVertex3f( 0.5, 0.5, 0.5)
+    glVertex3f(x.arrPoint[6].x, x.arrPoint[6].y, x.arrPoint[6].z)
+    glVertex3f(x.arrPoint[7].x, x.arrPoint[7].y, x.arrPoint[7].z)
 
+    glColor3f(0.0, 1.0, 0.0)
+    
+    #left
+    glVertex3f(x.arrPoint[8].x, x.arrPoint[8].y, x.arrPoint[8].z)
+    glVertex3f(x.arrPoint[9].x, x.arrPoint[9].y, x.arrPoint[9].z)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f(x.arrPoint[10].x, x.arrPoint[10].y, x.arrPoint[10].z)
     glColor3f(1.0, 0.0, 0.0)
-    glVertex3f(-0.5, 0.5, 0.5)
-    glVertex3f(-0.5, -0.5, -0.5)
-    glVertex3f(-0.5, 0.5, -0.5)
-    glColor3f(0.0, 1.0, 0.0)
-    glVertex3f( 0.5, 0.5, -0.5)
-    glVertex3f( 0.5, -0.5, -0.5)
+    glVertex3f(x.arrPoint[11].x, x.arrPoint[11].y, x.arrPoint[11].z)
 
+    #right
+    glVertex3f(x.arrPoint[12].x, x.arrPoint[12].y, x.arrPoint[12].z)
+    glVertex3f(x.arrPoint[13].x, x.arrPoint[13].y, x.arrPoint[13].z)
     glColor3f(0.0, 1.0, 0.0)
-    glVertex3f(-0.5, -0.5, 0.5)
-    glVertex3f(-0.5, 0.5, 0.5)
+    glVertex3f(x.arrPoint[14].x, x.arrPoint[14].y, x.arrPoint[14].z)
     glColor3f(0.0, 0.0, 1.0)
-    glVertex3f(-0.5, 0.5, -0.5)
-    glColor3f(1.0, 0.0, 0.0)
-    glVertex3f(-0.5, -0.5, -0.5)
-
-    glVertex3f( 0.5, -0.5, -0.5)
-    glVertex3f( 0.5, 0.5, -0.5)
-    glColor3f(0.0, 1.0, 0.0)
-    glVertex3f( 0.5, 0.5, 0.5)
-    glColor3f(0.0, 0.0, 1.0)
-    glVertex3f( 0.5, -0.5, 0.5)
+    glVertex3f(x.arrPoint[15].x, x.arrPoint[15].y, x.arrPoint[15].z)
 
     glColor3f(0.0, 0.0, 1.0)
 
-    glVertex3f(-0.5, 0.5, 0.5)
-    glVertex3f( 0.5, 0.5, 0.5)
+    #top
+    glVertex3f(x.arrPoint[16].x, x.arrPoint[16].y, x.arrPoint[16].z)
+    glVertex3f(x.arrPoint[17].x, x.arrPoint[17].y, x.arrPoint[17].z)
     glColor3f(0.0, 1.0, 0.0)
-    glVertex3f( 0.5, 0.5, -0.5)
-    glVertex3f(-0.5, 0.5, -0.5)
+    glVertex3f(x.arrPoint[18].x, x.arrPoint[18].y, x.arrPoint[18].z)
+    glVertex3f(x.arrPoint[19].x, x.arrPoint[19].y, x.arrPoint[19].z)
     glColor3f(1.0, 0.0, 0.0)
 
-    glVertex3f(-0.5, -0.5, 0.5)
+    #bottom
+    glVertex3f(x.arrPoint[20].x, x.arrPoint[20].y, x.arrPoint[20].z)
     glColor3f(0.0, 0.0, 1.0)
-    glVertex3f(-0.5, -0.5, -0.5)
-    glVertex3f( 0.5, -0.5, -0.5)
-    glVertex3f( 0.5, -0.5, 0.5)
+    glVertex3f(x.arrPoint[21].x, x.arrPoint[21].y, x.arrPoint[21].z)
+    glVertex3f(x.arrPoint[22].x, x.arrPoint[22].y, x.arrPoint[22].z)
+    glVertex3f(x.arrPoint[23].x, x.arrPoint[23].y, x.arrPoint[23].z)
 
     glEnd()
-
-    # glFlush()
-    glutSwapBuffers()
 
 #do the command for 2d only
 def doCommand2D(comm):
@@ -182,11 +201,11 @@ def keyPressed(*args):
     elif (args[0] == b"d"):
         tra_x -= 0.1
     elif (args[0] == b"u"):
-        x_rot += 1.0
-        y_rot += 1.0 
+        x_rot += 2.0
+        y_rot += 2.0 
     elif (args[0] == b"y"):
-        x_rot -= 1.0
-        y_rot -= 1.0
+        x_rot -= 2.0
+        y_rot -= 2.0
     elif (args[0] == b"x"):
         global Wireframe
         if Wireframe==False:
@@ -266,12 +285,21 @@ def run2d():
     print("Masukan titik-titik tersebut:")
     for i in range(0, n):
         x,y = input().split()
-        titik.add_point(x,y)
-        initial.add_point(x,y)
+        titik.add_point(x,y,0)
+        initial.add_point(x,y,0)
     makeWindow2D()
 
 #3D was selected (calling all transformation and method for 3D)
 def run3d():
+    tmpArr = [(-0.5, -0.5, 0.5), 
+    (0.5, -0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, 0.5, 0.5), 
+    (-0.5, -0.5, -0.5),(-0.5, 0.5, -0.5), ( 0.5, 0.5, -0.5),( 0.5, -0.5, -0.5), (-0.5, -0.5, 0.5)
+    ,(-0.5, 0.5, 0.5), (-0.5, 0.5, -0.5), (-0.5, -0.5, -0.5), ( 0.5, -0.5, -0.5), ( 0.5, 0.5, -0.5), 
+    ( 0.5, 0.5, 0.5), ( 0.5, -0.5, 0.5), (-0.5, 0.5, 0.5), ( 0.5, 0.5, 0.5), ( 0.5, 0.5, -0.5), 
+    (-0.5, 0.5, -0.5), (-0.5, -0.5, 0.5), (-0.5, -0.5, -0.5),( 0.5, -0.5, -0.5),( 0.5, -0.5, 0.5)]
+    for i in tmpArr:
+        titik.add_point(i[0], i[1], i[2])
+        initial.add_point(i[0], i[1], i[2])
     makeWindow3D()
     return
 
