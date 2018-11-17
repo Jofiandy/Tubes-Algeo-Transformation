@@ -11,7 +11,7 @@ def dilate3D(self, k):
 		i.y *= k
 		i.z *= k
 	return self
-	
+
 def reflect3D(self, x, y, z):
 	for i in self.arrPoint:
 		tmp = i.x - x
@@ -21,19 +21,28 @@ def reflect3D(self, x, y, z):
 		tmp = i.z - z
 		i.z -= 2*tmp
 	return self
-	
-def stretch3D(self, param, k):
+
+def shear3D(self, a, k): #problem
+	if (a=='x'):
+		for i in self.arrPoint:
+			i.x += i.y*k
+	elif (a=='y'):
+		for i in self.arrPoint:
+			i.y += i.x*k
+	return self
+
+def stretch3D(self, param, k): #problem
 	if (param == 'x'):
 		for i in self.arrPoint:
 			i.x = ((i.x-250)*k * 250)
 	elif (param == 'y'):
 		for i in self.arrPoint:
 			i.y = ((i.y-250)*k * 250)
-		else:
-			for i in self.arrPoint:
-				i.z = ((i.z-250)*k * 250)
+	elif (param == 'z'):
+		for i in self.arrPoint:
+			i.z = ((i.z-250)*k * 250)
 	return self
-	
+
 def custom3D (self, a, b, c, d, e, f, g, h, i):
 	for i in self.arrPoint:
 		t.x = (i.x - 250) * a + (i.y - 250) * d + (i.z - 250) * g
@@ -42,4 +51,11 @@ def custom3D (self, a, b, c, d, e, f, g, h, i):
 		i.x = t.x + 250
 		i.y = t.y + 250
 		i.z = t.z + 250
+	return self
+
+def reset3D(self, point): #problem
+	for i, j in zip(self.arrPoint, point.arrPoint):
+		i.x = j.x
+		i.y = j.y
+		i.z = j.z
 	return self
