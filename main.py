@@ -159,6 +159,23 @@ def makeWindow3D():
     InitGL(width, height)
     glutMainLoop()
 
+def drawAxis3D():
+    glBegin(GL_LINES)
+
+    glColor3f(random(), random(), random())
+    glVertex3f(0,8,0)
+    glVertex3f(0, -8,0)
+
+    glColor3f(random(), random(), random())
+    glVertex3f(8,0,0)
+    glVertex3f(-8,0,0)
+
+    glColor3f(random(), random(), random())
+    glVertex3f(0,0,8)
+    glVertex3f(0,0,-8)
+
+    glEnd()
+
 def InitGL(Width, Height):
     glClearColor(0.0, 0.0, 0.0, 0.0)
     glClearDepth(1.0)
@@ -185,7 +202,6 @@ def ReSizeGLScene(Width, Height):
     glMatrixMode(GL_MODELVIEW)
 
 def draw3D():
-    # print(initial.i)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
     glMatrixMode(GL_MODELVIEW)
 
@@ -196,6 +212,7 @@ def draw3D():
     0.0, 0.0, 0.0,
     0.0, 1.0, 0.0)
 
+    drawAxis3D()
     glutKeyboardFunc(keyPressed)
     glTranslatef(0.0, 0.0, -5.0)
 
