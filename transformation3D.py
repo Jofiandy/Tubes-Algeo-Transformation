@@ -34,13 +34,13 @@ def shear3D(self, a, k): #problem
 def stretch3D(self, param, k): #problem
 	if (param == 'x'):
 		for i in self.arrPoint:
-			i.x = ((i.x-250)*k * 250)
+			i.x *= k
 	elif (param == 'y'):
 		for i in self.arrPoint:
-			i.y = ((i.y-250)*k * 250)
+			i.y *= k
 	elif (param == 'z'):
 		for i in self.arrPoint:
-			i.z = ((i.z-250)*k * 250)
+			i.z *= k
 	return self
 
 def custom3D (self, a, b, c, d, e, f, g, h, i):
