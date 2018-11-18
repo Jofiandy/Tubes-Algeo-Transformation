@@ -16,6 +16,13 @@ tra_y = 0
 tra_z = 0
 x_rot = 0
 y_rot = 0
+angle = 0
+lx = 0
+lz = -1
+xx = 0
+zz = 5
+yy = 0
+ly = 1
 
 class Point:
     def __init__(self, x, y, z):
@@ -162,17 +169,17 @@ def makeWindow3D():
 def drawAxis3D():
     glBegin(GL_LINES)
 
-    glColor3f(random(), random(), random())
-    glVertex3f(0,8,0)
-    glVertex3f(0, -8,0)
+    glColor3f(1,0,0)
+    glVertex3f(0,500,0)
+    glVertex3f(0, -500,0)
 
-    glColor3f(random(), random(), random())
-    glVertex3f(8,0,0)
-    glVertex3f(-8,0,0)
+    glColor3f(0,0,1)
+    glVertex3f(500,0,0)
+    glVertex3f(-500,0,0)
 
-    glColor3f(random(), random(), random())
-    glVertex3f(0,0,8)
-    glVertex3f(0,0,-8)
+    glColor3f(0,1,0)
+    glVertex3f(0,0,500)
+    glVertex3f(0,0,-500)
 
     glEnd()
 
@@ -208,17 +215,17 @@ def draw3D():
     glLoadIdentity()
 
     gluLookAt(
-    0.0, 0.0, 3.0,
-    0.0, 0.0, 0.0,
-    0.0, 1.0, 0.0)
+    xx, 1, zz,
+    xx+lx, yy+ly, zz+lz,
+    0, 1.0, 0)
 
     drawAxis3D()
     glutKeyboardFunc(keyPressed)
-    glTranslatef(0.0, 0.0, -5.0)
+    glTranslatef(0.0, 0.0, 0.0)
 
     glRotatef(x_rot, 1.0, 0.0, 0.0)
     glRotatef(y_rot, 0.0, 1.0, 0.0)
-    glTranslatef(tra_x, tra_y, tra_z)
+    # glTranslatef(tra_x, tra_y, tra_z)
 
     drawShape3D(titik)
     glFlush()
@@ -236,11 +243,11 @@ def doCommand3D():
         x, y, z = input().split()
         P = reflect3D(titik, float(x), float(y), float(z))
     elif (comm == "shear"):
-        a, k = input().split()
-        P = shear(titik, a, float(k))
+        a, b, c = input().split()
+        P = shear3D(titik, a, float(b), float(c))
     elif (comm == "rotate"):
-        deg, a, b = input().split()
-        P = rotate(titik, float(deg), float(a), float(b))
+        a, deg = input().split()
+        P = rotate3D(titik,a, float(deg))
     elif (comm == "stretch"):
         param, x = input().split()
         P = stretch3D(titik, param, float(x))
@@ -249,6 +256,10 @@ def doCommand3D():
         P = custom3D(titik, float(a), float(b), float(c), float(d))
     elif (comm == "reset"):
         P = reset3D(titik, initial)
+    elif (comm == "multiple"):
+        n = input()
+        for i in range(0, int(n)):
+            doCommand3D()
     elif (comm == "exit"):
         sys.exit()
 
@@ -258,18 +269,29 @@ def keyPressed(*args):
     global tra_z
     global x_rot
     global y_rot
+    global lx, lz, xx, zz, ly, yy
+    global angle
+    fraction = 0.1
     if (args[0] == b"w"):
-        tra_z -= 0.1
+        xx += lx * fraction
+        zz += lz * fraction
     elif (args[0] == b"s"):
-        tra_z += 0.1
+        xx -= lx * fraction
+        zz -= lz * fraction
     elif (args[0] == b"a"):
-        tra_x += 0.1
+        angle -= 0.1
+        lx = math.sin(angle)
+        lz = -math.cos(angle)
     elif (args[0] == b"d"):
-        tra_x -= 0.1
+        angle += 0.1
+        lx = math.sin(angle)
+        lz = -math.cos(angle)
     elif (args[0] == b"z"):
-        tra_y += 0.1
+        yy += ly * fraction
+        # xx += lx * fraction
     elif (args[0] == b"c"):
-        tra_y -= 0.1
+        yy -= ly * fraction
+        # xx -= lx * fraction
     elif (args[0] == b"u"):
         x_rot += 2.0
         y_rot += 2.0
