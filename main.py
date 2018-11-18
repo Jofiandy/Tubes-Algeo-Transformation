@@ -153,6 +153,7 @@ def run3d():
     makeWindow3D()
     return
 
+#Make Window for 3D
 def makeWindow3D():
     global window
     glutInit()                                             # initialize glut
@@ -166,6 +167,7 @@ def makeWindow3D():
     InitGL(width, height)
     glutMainLoop()
 
+#Draw 3DAxis
 def drawAxis3D():
     glBegin(GL_LINES)
 
@@ -208,6 +210,7 @@ def ReSizeGLScene(Width, Height):
     gluPerspective(45.0, float(Width)/float(Height), 0.1, 100.0)
     glMatrixMode(GL_MODELVIEW)
 
+#Draw Function
 def draw3D():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT) # clear the screen
     glMatrixMode(GL_MODELVIEW)
@@ -225,12 +228,12 @@ def draw3D():
 
     glRotatef(x_rot, 1.0, 0.0, 0.0)
     glRotatef(y_rot, 0.0, 1.0, 0.0)
-    # glTranslatef(tra_x, tra_y, tra_z)
 
     drawShape3D(titik)
     glFlush()
     glutSwapBuffers()
 
+#Command Input for Transformation
 def doCommand3D():
     comm = input()
     if (comm == "translate"):
@@ -263,6 +266,7 @@ def doCommand3D():
     elif (comm == "exit"):
         sys.exit()
 
+#Command When Key is pressed
 def keyPressed(*args):
     global tra_x
     global tra_y
@@ -288,10 +292,8 @@ def keyPressed(*args):
         lz = -math.cos(angle)
     elif (args[0] == b"z"):
         yy += ly * fraction
-        # xx += lx * fraction
     elif (args[0] == b"c"):
         yy -= ly * fraction
-        # xx -= lx * fraction
     elif (args[0] == b"u"):
         x_rot += 2.0
         y_rot += 2.0
@@ -311,6 +313,7 @@ def keyPressed(*args):
     elif(args[0] == b"f"):
         doCommand3D()
 
+#Drawing shape of Cube
 def drawShape3D(x):
     glBegin(GL_QUADS)
     glColor3f(1.0, 0.0,  0.0)

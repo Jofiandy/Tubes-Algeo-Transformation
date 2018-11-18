@@ -1,4 +1,4 @@
-import math 
+import math
 def translate3D(self, x, y, z):
 	for i in self.arrPoint:
 		i.x += x
@@ -23,7 +23,7 @@ def reflect3D(self, x, y, z):
 		i.z -= 2*tmp
 	return self
 
-def shear3D(self, a, b, c): 
+def shear3D(self, a, b, c):
 	if (a=='x'):
 		for i in self.arrPoint:
 			i.x += b * i.y + c * i.z
@@ -51,7 +51,7 @@ def rotate3D(self,a, deg):
 			tmp1 = i.x
 			tmp2 = i.z
 			i.x = tmp1 * cos + tmp2 * sin
-			i.z = -sin * tmp1 + tmp2 * cos 
+			i.z = -sin * tmp1 + tmp2 * cos
 	elif (a == 'z'):
 		for i in self.arrPoint:
 			tmp1 = i.x
